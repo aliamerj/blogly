@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
-
+import { FormControl, FormField, FormItem, FormMessage } from "../ui/form";
+import { Control } from "react-hook-form";
 const toolbarOptions = [
   [{ header: [1, 2, 3, 4, 5, 6, false] }],
   ["bold", "italic", "underline", "strike"],
@@ -97,19 +97,27 @@ const toolbarOptions = [
   ["clean"],
 ];
 
-export const QuillEditor = () => {
-  const [value, setValue] = useState("");
-
+export const QuillEditor = ({ control }: { control: Control<any> }) => {
   return (
-    <ReactQuill
-      className="flex-1 ql-custom"
-      modules={{
-        toolbar: toolbarOptions,
-      }}
-      theme="snow"
-      placeholder="Start writing your inspiring story here..."
-      value={value}
-      onChange={setValue}
+    <FormField
+      control={control}
+      name="content"
+      render={({ field }) => (
+        <FormItem>
+          <FormControl>
+            <ReactQuill
+              className="flex-1 ql-custom"
+              modules={{
+                toolbar: toolbarOptions,
+              }}
+              theme="snow"
+              placeholder="Start writing your inspiring story here..."
+              {...field}
+            />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
     />
   );
 };
