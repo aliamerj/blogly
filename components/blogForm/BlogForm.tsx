@@ -122,7 +122,6 @@ export const BlogForm = ({
       const create = async () => {
         try {
           if (blogData && blogId) {
-            console.log(targetData);
             await patchBlog(blogId, targetData);
             setBlogData(data);
             setHasDifferences(false);
@@ -130,13 +129,17 @@ export const BlogForm = ({
               title: "Blog updated sucessfuly",
             });
             localStorage.removeItem(LOCAL_STORAGE_KEY);
+            route.refresh();
             return;
           }
           const newblogId = await postBlog(targetData);
           localStorage.removeItem(LOCAL_STORAGE_KEY);
           if (toSave) {
-            return route.push("/blog/update/" + newblogId);
+            route.push("/blog/update/" + newblogId);
+            route.refresh();
+            return;
           }
+          return route.push("/blog");
         } catch (error: any) {
           toast({
             variant: "destructive",
@@ -157,7 +160,6 @@ export const BlogForm = ({
     form.setValue("status", "published");
     form.setValue("visibility", "public");
     form.handleSubmit((data) => onSubmit(data, false))();
-    return route.push("/blog");
   };
 
   const handleSaveDraft = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -190,7 +192,7 @@ export const BlogForm = ({
                 </CardDescription>
               </div>
               <div className="flex flex-col gap-2">
-                {blogData && blogData.status === "published" ? (
+                {blogData && blogData.visibility === "public" ? (
                   <Button
                     onClick={handlePublish}
                     disabled={isPending || !hasDifferences}
@@ -208,23 +210,21 @@ export const BlogForm = ({
                     )}
                   </Button>
                 ) : (
-                  blogData?.status === "draft" && (
-                    <Button
-                      onClick={handleSaveDraft}
-                      disabled={isPending || !hasDifferences}
-                    >
-                      {isPending ? (
-                        <>
-                          <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />{" "}
-                          Save Draft
-                        </>
-                      ) : (
-                        <>
-                          <Save className="mr-2 h-5 w-5" /> Save Draft
-                        </>
-                      )}
-                    </Button>
-                  )
+                  <Button
+                    onClick={handleSaveDraft}
+                    disabled={isPending || !hasDifferences}
+                  >
+                    {isPending ? (
+                      <>
+                        <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />{" "}
+                        Save Draft
+                      </>
+                    ) : (
+                      <>
+                        <Save className="mr-2 h-5 w-5" /> Save Draft
+                      </>
+                    )}
+                  </Button>
                 )}
 
                 <Button
@@ -373,16 +373,7 @@ export const BlogForm = ({
                   Delete
                 </Button>
               </div>
-            ) : blogData?.visibility === "unlisted" ? (
-              <Button
-                onClick={handlePublish}
-                size="lg"
-                className="w-full"
-                disabled={isPending}
-              >
-                <Send className="mr-2 h-6 w-6" /> Publish
-              </Button>
-            ) : (
+            ) : blogData?.visibility === "private" ? (
               <Button
                 onClick={handlePublish}
                 size="lg"
@@ -391,6 +382,15 @@ export const BlogForm = ({
               >
                 <Repeat className="mr-2 h-5 w-5" />
                 Republish
+              </Button>
+            ) : (
+              <Button
+                onClick={handlePublish}
+                size="lg"
+                className="w-full"
+                disabled={isPending}
+              >
+                <Send className="mr-2 h-6 w-6" /> Publish
               </Button>
             )}
           </CardFooter>
