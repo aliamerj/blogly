@@ -199,13 +199,23 @@ export const BlogForm = ({
         <Card className="flex-1">
           <CardHeader>
             <div className="flex justify-between items-center">
-              <div>
-                <CardTitle className="text-2xl">Create New Blog </CardTitle>
-                <CardDescription>
-                  Share your thoughts and insights in a captivating new post.
-                  Let your creativity flow!
-                </CardDescription>
-              </div>
+              {blogData ? (
+                <div>
+                  <CardTitle className="text-2xl"> Edit Blog Post </CardTitle>
+                  <CardDescription>
+                    Update your thoughts and insights in this post. Keep your
+                    creativity flowing and make it even better!
+                  </CardDescription>
+                </div>
+              ) : (
+                <div>
+                  <CardTitle className="text-2xl"> Create New Blog </CardTitle>
+                  <CardDescription>
+                    Share your thoughts and insights in a captivating new post.
+                    Let your creativity flow!
+                  </CardDescription>
+                </div>
+              )}
               <div className="flex flex-col gap-2">
                 {blogData && blogData.visibility === "public" ? (
                   <Button

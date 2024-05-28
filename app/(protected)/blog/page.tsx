@@ -4,8 +4,22 @@ import { databaseDrizzle } from "@/db/database";
 import Link from "next/link";
 import React from "react";
 
-export default async function page() {
-  const blogs = await databaseDrizzle.query.blogs.findMany();
+export default async function page({
+  searchParams,
+}: {
+  searchParams: { search?: string };
+}) {
+  const search = searchParams.search;
+  const blogs = await databaseDrizzle.query.blogs.findMany({
+    where:
+      search && search !== ""
+        ? (b, opt) =>
+            opt.or(
+              opt.ilike(b.title, `%${search}%`),
+              opt.ilike(b.description, `%${search}%`),
+            )
+        : undefined,
+  });
 
   return (
     <>
@@ -18,7 +32,7 @@ export default async function page() {
           {blogs.length === 0 ? (
             <div className="flex h-full w-full justify-center items-center flex-wrap gap-4 p-4">
               <h3 className="text-2xl font-bold tracking-tight">
-                You have no Blog yet
+                No Blog Found
               </h3>
             </div>
           ) : (

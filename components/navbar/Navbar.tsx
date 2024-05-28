@@ -1,12 +1,11 @@
-import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "../ui/button";
-import { BookMarked, Menu, NotebookPen, Search, Unplug } from "lucide-react";
-
+import { BookMarked, Menu, NotebookPen, Unplug } from "lucide-react";
 import Link from "next/link";
 import { Logo } from "../logo/Logo";
 import { ModeToggle } from "../modeToggle/ModeToggle";
 import UserAvatar from "../userAvatar/UserAvatar";
+import { SearchField } from "../searchField/SearchField";
 export const Navbar = ({ withSearch }: { withSearch: boolean }) => {
   return (
     <div className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
@@ -46,20 +45,7 @@ export const Navbar = ({ withSearch }: { withSearch: boolean }) => {
           </nav>
         </SheetContent>
       </Sheet>
-      <div className="w-full flex-1">
-        {withSearch && (
-          <form>
-            <div className="relative">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Search Files..."
-                className="w-full appearance-none bg-background pl-8 shadow-none md:w-2/3 lg:w-1/3"
-              />
-            </div>
-          </form>
-        )}
-      </div>
+      <div className="w-full flex-1">{withSearch && <SearchField />}</div>
       <UserAvatar />
       <div className="ml-auto h-8 w-8">
         <ModeToggle />
