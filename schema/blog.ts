@@ -1,5 +1,5 @@
 import { z } from "zod";
-
+export const MB = 1024 * 1024; // 1Mb
 export const blogSchema = z.object({
   title: z
     .string()
@@ -7,8 +7,21 @@ export const blogSchema = z.object({
     .max(255, { message: "Title cannot exceed 255 characters" }),
   content: z.string().min(1, { message: "Content is required" }),
   image: z
-    .string()
-    .max(2048, { message: "Image URL cannot exceed 2048 characters" })
+    .any()
+    .refine(
+      (file) => {
+        return (
+          file ||
+          (file instanceof File && file.type.substring(0, 5) === "image")
+        );
+      },
+      {
+        message: "Invalid image",
+      },
+    )
+    .refine((file) => file || (file instanceof File && file.size < MB), {
+      message: "image is too large. Maximum size is 1 MB",
+    })
     .optional(),
   author: z
     .string()
@@ -31,9 +44,21 @@ export const updateBlogSchema = z.object({
     .optional(),
   content: z.string().min(1, { message: "Content is required" }).optional(),
   image: z
-    .string()
-    .url({ message: "Invalid image URL" })
-    .max(2048, { message: "Image URL cannot exceed 2048 characters" })
+    .any()
+    .refine(
+      (file) => {
+        return (
+          file ||
+          (file instanceof File && file.type.substring(0, 5) === "image")
+        );
+      },
+      {
+        message: "Invalid image",
+      },
+    )
+    .refine((file) => file || (file instanceof File && file.size < MB), {
+      message: "image is too large. Maximum size is 1 MB",
+    })
     .optional(),
   author: z
     .string()

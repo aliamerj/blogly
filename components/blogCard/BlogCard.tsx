@@ -1,7 +1,7 @@
 import { blogs } from "@/db/schemas/blogs";
 import React from "react";
 import {
-  Image as LucideImage,
+  ImageOff as LucideImage,
   User,
   Calendar,
   EyeOff,
@@ -34,14 +34,13 @@ export const BlogCard = ({
 }) => {
   return (
     <Card className="flex flex-col w-full max-w-lg mx-auto shadow-md hover:shadow-lg transition-transform duration-300 rounded-lg overflow-hidden bg-white dark:bg-gray-800 cursor-pointer transform hover:-translate-y-1 hover:scale-105">
-      {image && (
+      {image ? (
         <div className="relative w-full h-56">
-          <Image
-            src={image}
-            alt={title}
-            className="object-cover w-full h-full"
-          />
-          <LucideImage className="absolute bottom-2 right-2 w-6 h-6 text-white opacity-75" />
+          <Image src={image} fill={true} alt={title} />
+        </div>
+      ) : (
+        <div className="flex justify-center items-center w-full h-56">
+          <LucideImage size={200} />
         </div>
       )}
       <CardHeader className="flex-1 p-6">

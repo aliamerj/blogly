@@ -23,7 +23,6 @@ import {
   Calendar,
   Eye,
   Flame,
-  ImagePlus,
   LockKeyhole,
   Repeat,
   Save,
@@ -31,7 +30,7 @@ import {
   Trash,
 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
-import { useForm, useWatch } from "react-hook-form";
+import { ControllerRenderProps, useForm, useWatch } from "react-hook-form";
 import { useEffect, useState, useTransition } from "react";
 import { blogSchema, updateBlogSchema } from "@/schema/blog";
 import { z } from "zod";
@@ -42,6 +41,7 @@ import { format } from "date-fns";
 import { useRouter } from "next/navigation";
 import { patchBlog } from "@/actions/blog/patch-blog";
 import { postBlog } from "@/actions/blog/post-blog";
+import Image from "next/image";
 
 type UpdateBlogFormData = z.infer<typeof updateBlogSchema>;
 type BlogFormData = z.infer<typeof blogSchema>;
@@ -121,8 +121,11 @@ export const BlogForm = ({
     startTransition(() => {
       const create = async () => {
         try {
+          const formData = new FormData();
+          formData.append("image", targetData.image);
+          targetData.image = null;
           if (blogData && blogId) {
-            await patchBlog(blogId, targetData);
+            await patchBlog(targetData, formData, blogId);
             setBlogData(data);
             setHasDifferences(false);
             toast({
@@ -132,7 +135,7 @@ export const BlogForm = ({
             route.refresh();
             return;
           }
-          const newblogId = await postBlog(targetData);
+          const newblogId = await postBlog(targetData, formData);
           localStorage.removeItem(LOCAL_STORAGE_KEY);
           if (toSave) {
             route.push("/blog/update/" + newblogId);
@@ -173,11 +176,23 @@ export const BlogForm = ({
     form.setValue("status", "draft");
     form.handleSubmit((data) => onSubmit(data, true))();
   };
-  const importImage = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    console.log("add new");
-  };
 
+  const handleImageChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    field: ControllerRenderProps,
+  ) => {
+    event.preventDefault();
+    if (!event.target.files) return;
+    const file = event.target.files[0];
+    if (file && file.type.substring(0, 5) === "image") {
+      field.onChange(file);
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Invalid Image Type",
+      });
+    }
+  };
   return (
     <Form {...form}>
       <form className="p-5 flex gap-5 flex-col lg:flex-row">
@@ -262,9 +277,33 @@ export const BlogForm = ({
                   )}
                 />
               </div>
-              <Button onClick={importImage} size="lg" className="w-52">
-                <ImagePlus className="mr-2 h-5 w-5" /> Add Media
-              </Button>
+              {blogData?.image && (
+                <Image
+                  alt="image"
+                  src={blogData.image}
+                  width={100}
+                  height={100}
+                />
+              )}
+              <div className="grid w-full max-w-sm items-center gap-1.5">
+                <FormField
+                  control={form.control}
+                  name="image"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel htmlFor="image">Image</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => handleImageChange(e, { ...field })}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
               <QuillEditor control={form.control} />
             </div>
           </CardContent>
