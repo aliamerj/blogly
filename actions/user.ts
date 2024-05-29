@@ -4,7 +4,6 @@ import { databaseDrizzle } from "@/db/database";
 import { users } from "@/db/schemas/users";
 import { RegisterSchema } from "@/schema/user";
 import { z } from "zod";
-
 export async function addNewUser(data: z.infer<typeof RegisterSchema>) {
   const validate = RegisterSchema.safeParse(data);
   if (!validate.success) throw new Error("Invalid data provided");

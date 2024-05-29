@@ -16,6 +16,7 @@ export const users = pgTable("user", {
   email: text("email").notNull().unique(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
+  apiKey: text("api_key"),
   hashedPassword: text("hashedPassword"),
 });
 

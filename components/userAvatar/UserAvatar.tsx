@@ -10,14 +10,27 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-export default async function UserAvatar() {
-  const session = await auth();
+import { Session } from "next-auth";
+export default async function UserAvatar({
+  session,
+}: {
+  session?: Session | null;
+}) {
+  let currentSession;
+  if (!session) {
+    currentSession = await auth();
+  } else {
+    currentSession = session;
+  }
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar className="h-7 w-7">
-          <AvatarImage src={session?.user?.image ?? undefined} alt="@shadcn" />
+          <AvatarImage
+            src={currentSession?.user?.image ?? undefined}
+            alt="@shadcn"
+          />
           <AvatarFallback>
             <Button variant="secondary" size="icon" className="rounded-full">
               <CircleUser />
@@ -29,7 +42,6 @@ export default async function UserAvatar() {
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Settings</DropdownMenuItem>
         <DropdownMenuItem>Support</DropdownMenuItem>
         <DropdownMenuSeparator />
         <form

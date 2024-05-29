@@ -1,4 +1,5 @@
 import { pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { users } from "./users";
 
 export const statusEnum = pgEnum("status", ["draft", "published", "archived"]);
 export const visibilityEnum = pgEnum("visibility", [
@@ -11,6 +12,9 @@ export const blogs = pgTable("blog", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
+  userId: text("user_id")
+    .references(() => users.id)
+    .notNull(),
   title: text("title").notNull(),
   content: text("content").notNull(),
   image: text("image"),
