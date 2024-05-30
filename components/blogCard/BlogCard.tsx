@@ -36,7 +36,13 @@ export const BlogCard = ({
     <Card className="flex flex-col w-full max-w-lg mx-auto shadow-md hover:shadow-lg transition-transform duration-300 rounded-lg overflow-hidden bg-white dark:bg-gray-800 cursor-pointer transform hover:-translate-y-1 hover:scale-105">
       {image ? (
         <div className="relative w-full h-56">
-          <Image src={image} fill={true} alt={title} />
+          <Image
+            priority
+            src={image}
+            fill={true}
+            alt={title}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
         </div>
       ) : (
         <div className="flex justify-center items-center w-full h-56">

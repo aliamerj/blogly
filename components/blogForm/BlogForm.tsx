@@ -71,7 +71,10 @@ const findDifferences = (
   const differences: any = {};
   Object.keys(newData).forEach((key) => {
     const typedKey = key as keyof BlogFormData;
-    if (!_.isEqual(initialData[typedKey], newData[typedKey])) {
+    if (
+      typedKey !== "publishedTime" &&
+      !_.isEqual(initialData[typedKey], newData[typedKey])
+    ) {
       differences[typedKey] = newData[typedKey];
     }
   });
@@ -400,28 +403,16 @@ export const BlogForm = ({
           </CardContent>
           <CardFooter className="flex justify-center">
             {blogData && blogData?.visibility === "public" ? (
-              <div>
-                <Button
-                  onClick={handleToPrivate}
-                  variant="destructive"
-                  size="lg"
-                  className="w-full"
-                  disabled={isPending}
-                >
-                  <LockKeyhole className="mr-2 h-6 w-6" />
-                  To Private
-                </Button>
-                <Button
-                  onClick={handlePublish}
-                  variant="link"
-                  size="lg"
-                  className="w-full text-destructive"
-                  disabled={isPending}
-                >
-                  <Trash className="mr-2 h-6 w-6" />
-                  Delete
-                </Button>
-              </div>
+              <Button
+                onClick={handleToPrivate}
+                variant="destructive"
+                size="lg"
+                className="w-full"
+                disabled={isPending}
+              >
+                <LockKeyhole className="mr-2 h-6 w-6" />
+                To Private
+              </Button>
             ) : blogData?.visibility === "private" ? (
               <Button
                 onClick={handlePublish}

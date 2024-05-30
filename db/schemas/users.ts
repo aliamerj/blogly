@@ -16,8 +16,16 @@ export const users = pgTable("user", {
   email: text("email").notNull().unique(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
-  apiKey: text("api_key"),
   hashedPassword: text("hashedPassword"),
+});
+
+export const apiKeys = pgTable("apiKey", {
+  name: text("name").primaryKey(),
+  userId: text("user_id")
+    .references(() => users.id, { onDelete: "cascade" })
+    .notNull(),
+  apiKey: text("api_key").unique().notNull(),
+  generatedTime: timestamp("generated_time").notNull(),
 });
 
 export const accounts = pgTable(

@@ -1,5 +1,5 @@
 {
-  "id": "e2166163-2a75-48bc-8d30-6e6384722619",
+  "id": "17dedbc8-a22b-4030-ad7b-ae11eb6eb24d",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "6",
   "dialect": "postgresql",
@@ -190,6 +190,62 @@
       },
       "uniqueConstraints": {}
     },
+    "public.apiKey": {
+      "name": "apiKey",
+      "schema": "",
+      "columns": {
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "api_key": {
+          "name": "api_key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "generated_time": {
+          "name": "generated_time",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "apiKey_user_id_user_id_fk": {
+          "name": "apiKey_user_id_user_id_fk",
+          "tableFrom": "apiKey",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "apiKey_api_key_unique": {
+          "name": "apiKey_api_key_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "api_key"
+          ]
+        }
+      }
+    },
     "public.session": {
       "name": "session",
       "schema": "",
@@ -262,12 +318,6 @@
         },
         "image": {
           "name": "image",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "api_key": {
-          "name": "api_key",
           "type": "text",
           "primaryKey": false,
           "notNull": false

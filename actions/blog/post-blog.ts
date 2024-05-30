@@ -6,10 +6,13 @@ import { blogSchema } from "@/schema/blog";
 import { z } from "zod";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { s3, uploadProjectLogo } from "@/aws/s3_bucket";
+import { auth } from "@/auth";
 export async function postBlog(
   data: z.infer<typeof blogSchema>,
   file: FormData,
 ) {
+  const session = await auth();
+  if (!session?.user?.id) throw new Error("forbidden");
   const validate = blogSchema.safeParse({ ...data, image: file.get("image") });
   if (!validate.success) throw new Error("Invalid data provided");
   const { title, description, content, image, author, status, visibility } =
@@ -21,6 +24,7 @@ export async function postBlog(
   }
   const blogValue: typeof blogs.$inferInsert = {
     id: uid,
+    userId: session.user.id,
     title,
     description,
     author,
