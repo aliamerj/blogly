@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Session } from "next-auth";
+import Link from "next/link";
 export default async function UserAvatar({
   session,
 }: {
@@ -42,7 +43,9 @@ export default async function UserAvatar({
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Support</DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/support"> Support</Link>
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <form
           action={async () => {

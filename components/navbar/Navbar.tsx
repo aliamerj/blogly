@@ -29,7 +29,7 @@ export const Navbar = ({
           </div>{" "}
           <nav className="grid gap-2 text-lg font-medium">
             <Link
-              href="#"
+              href="/blog"
               className="flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:text-primary"
             >
               <BookMarked className="h-4 w-4" />
