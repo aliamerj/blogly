@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { databaseDrizzle } from "./db/database";
 import { authConfig } from "./auth.config";
+import GoogleProvider, { GoogleProfile } from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import type { Provider } from "next-auth/providers";
 
@@ -44,6 +45,16 @@ const providers: Provider[] = [
       } catch (error) {
         return null;
       }
+    },
+  }),
+  GoogleProvider({
+    profile(profile: GoogleProfile) {
+      return {
+        id: profile.sub,
+        name: profile.name,
+        email: profile.email,
+        image: profile.picture,
+      };
     },
   }),
 ];

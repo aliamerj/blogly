@@ -134,9 +134,9 @@ export default function LoginPage() {
             <Button
               variant="outline"
               className="w-full"
-              onClick={() => signIn("github")}
+              onClick={() => signIn("google")}
             >
-              Login with Github
+              Login with Google
             </Button>
           </div>
           <div className="mt-4 text-center text-sm">
