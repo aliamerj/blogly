@@ -35,7 +35,7 @@ const faqs = [
 
 const FaqSection = () => {
   return (
-    <div className="container mx-auto px-4">
+    <div className="container mx-auto px-4" itemScope itemType="https://schema.org/FAQPage">
       <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">
         Frequently Asked Questions
       </h2>

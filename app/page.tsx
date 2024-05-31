@@ -24,7 +24,7 @@ export default function Home() {
         <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white pt-14 h-[50vh]">
           <div className="container mx-auto px-4 text-center md:px-14 lg:px-52">
             <h1 className="text-4xl md:text-6xl font-bold mb-4">
-              Simplify Your Blog Management
+              Simplify Your Blog Management in Your App
             </h1>
             <p className="text-lg md:text-2xl mb-8">
               Effortlessly integrate and manage blogs in your Next.js or React
