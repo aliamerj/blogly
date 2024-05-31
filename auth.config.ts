@@ -1,10 +1,19 @@
 import type { NextAuthConfig } from "next-auth";
 import NextAuth from "next-auth";
-import google from "next-auth/providers/google";
+import github,{GitHubProfile} from "next-auth/providers/github";
 
 export const authConfig = {
   trustHost: true,
-  providers: [google],
+  providers: [github({
+    profile(profile: GitHubProfile){
+      return {
+        id: profile.id.toString(),
+        name: profile.name,
+        email:profile.email,
+        image:profile.avatar_url
+      }
+    }
+  })],
   session: { strategy: "jwt" },
   pages: {
     signIn: "/login",

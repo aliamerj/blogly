@@ -35,7 +35,7 @@ export default function Home() {
             </Button>
           </div>
         </div>
-        <div className="relative w-full flex justify-center p-5 lg:pt-10">
+        <div className="relative w-full flex justify-center p-1 md:pt-20 lg:pt-32">
           <div className="absolute w-full max-w-4xl mx-auto transform -translate-y-1/2">
             <Image
               src="/images/dashboard-screenshot.png"
