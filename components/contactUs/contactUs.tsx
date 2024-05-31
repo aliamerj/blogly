@@ -46,7 +46,7 @@ export default function ContactUs() {
   };
 
   return (
-    <Card className="w-full max-w-xl mx-auto mt-14 p-4">
+    <Card className="w-full max-w-xl mx-auto my-14 p-4">
       <CardHeader>
         <CardTitle className="text-2xl">Contact Support</CardTitle>
         <CardDescription className="text-lg">
@@ -85,7 +85,7 @@ export default function ContactUs() {
               placeholder="Your Message"
               required
               disabled={loading}
-              className="w-full min-h-60"
+              className="w-full min-h-40"
             />
           </div>
           <CardFooter>

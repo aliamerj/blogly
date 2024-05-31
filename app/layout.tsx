@@ -26,7 +26,7 @@ export default function RootLayout({
       <body className={`${acme.variable} ${inter.className}`}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
         >

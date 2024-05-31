@@ -28,6 +28,7 @@ import { useSearchParams } from "next/navigation";
 import { useSignInErrorMessage } from "@/lib/errors/auth/hook";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
+import { Loader } from "@/components/loader/Loader";
 export default function LoginPage() {
   const [isPending, startTransition] = useTransition();
   const params = useSearchParams();
@@ -55,6 +56,9 @@ export default function LoginPage() {
       login();
     });
   };
+  if (isPending) {
+    return <Loader />;
+  }
   return (
     <div className="flex h-screen items-center justify-center">
       <Card className="mx-auto max-w-sm">

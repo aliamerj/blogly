@@ -10,12 +10,12 @@ import {
 const apiExample = (apiKey?: string) => `const options = {
   method: 'GET',
   headers: {
-    Authorization: 'Bearer ${apiKey ?? "blogly_*******************"}',
+    Authorization: 'Bearer ${apiKey ?? "blogly_****************"}',
     'Content-Type': 'application/json',
   },
 };
 
-fetch('https://blogly/api/blogs', options)
+fetch('https://blogly.co/api/blog', options)
   .then(response => response.json())
   .then(response => console.log(response))
   .catch(err => console.error(err));
@@ -23,7 +23,7 @@ fetch('https://blogly/api/blogs', options)
 
 export const ApiUseExample = ({ apiKey }: { apiKey?: string }) => {
   return (
-    <Card className="w-full max-w-xl mx-auto mt-8 p-4">
+    <Card className="text-start w-full max-w-xl mx-auto mt-8 p-4">
       <CardHeader>
         <CardTitle>How to Use the API Key</CardTitle>
         <CardDescription>

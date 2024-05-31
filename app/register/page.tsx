@@ -55,6 +55,9 @@ export default function LoginForm() {
       create();
     });
   };
+  if (isPending) {
+    return <Loader />;
+  }
   return (
     <div className="flex h-screen items-center justify-center">
       <Card className="mx-auto max-w-sm">
