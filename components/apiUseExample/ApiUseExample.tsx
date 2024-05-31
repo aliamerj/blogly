@@ -15,7 +15,7 @@ const apiExample = (apiKey?: string) => `const options = {
   },
 };
 
-fetch('https://blogly.co/api/blog', options)
+fetch('https://blogly.co/api/blogs', options)
   .then(response => response.json())
   .then(response => console.log(response))
   .catch(err => console.error(err));
