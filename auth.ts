@@ -3,7 +3,6 @@ import bcrypt from "bcrypt";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { databaseDrizzle } from "./db/database";
 import { authConfig } from "./auth.config";
-import GitHubProvider, { GitHubProfile } from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
 import type { Provider } from "next-auth/providers";
 

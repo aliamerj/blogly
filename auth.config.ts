@@ -3,7 +3,6 @@ import NextAuth from "next-auth";
 import github,{GitHubProfile} from "next-auth/providers/github";
 
 export const authConfig = {
-  trustHost: true,
   providers: [github({
     profile(profile: GitHubProfile){
       return {
