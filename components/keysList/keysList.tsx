@@ -50,7 +50,7 @@ export const KeysList = async () => {
           </TableHeader>
           <TableBody>
             {keys.map((key) => (
-              <TableRow>
+              <TableRow key={key.apiKey}>
                 <TableCell className="font-medium">{key.name}</TableCell>
                 <TableCell className="text-center">
                   {format(key.generatedTime, "PP")}

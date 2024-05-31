@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import {
   timestamp,
   pgTable,
@@ -7,6 +8,7 @@ import {
 } from "drizzle-orm/pg-core";
 
 import type { AdapterAccountType } from "next-auth/adapters";
+import { blogs } from "./blogs";
 
 export const users = pgTable("user", {
   id: text("id")
@@ -71,3 +73,7 @@ export const verificationTokens = pgTable(
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
   }),
 );
+
+export const usersRelations = relations(users, ({ many }) => ({
+  blogs: many(blogs),
+}));

@@ -44,6 +44,7 @@ const errorMessagesMap = {
 };
 export const useSignInErrorMessage = (errorType: string) => {
   const errorMessage = useMemo(() => {
+    if (!errorType) return;
     return (
       errorMessagesMap[errorType as keyof typeof errorMessagesMap] ||
       "An unknown error occurred. Please try again."

@@ -5,6 +5,15 @@ import { blogSchema } from "@/schema/blog";
 import { notFound } from "next/navigation";
 import { z } from "zod";
 
+export async function generateStaticParams() {
+  const blogs = await databaseDrizzle.query.blogs.findMany({
+    columns: {
+      id: true,
+    },
+  });
+  return blogs.map(({ id }) => id);
+}
+
 export default async function page({ params }: { params: { id: string } }) {
   const blog = await databaseDrizzle.query.blogs.findFirst({
     where: (b, opt) => opt.eq(b.id, params.id),

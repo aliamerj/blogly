@@ -1,7 +1,9 @@
+import { auth } from "@/auth";
 import { BlogCard } from "@/components/blogCard/BlogCard";
 import { Navbar } from "@/components/navbar/Navbar";
 import { databaseDrizzle } from "@/db/database";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import React from "react";
 
 export default async function page({
@@ -9,21 +11,25 @@ export default async function page({
 }: {
   searchParams: { search?: string };
 }) {
+  const session = await auth();
+  if (!session?.user) return notFound();
+
   const search = searchParams.search;
   const blogs = await databaseDrizzle.query.blogs.findMany({
-    where:
-      search && search !== ""
-        ? (b, opt) =>
-            opt.or(
-              opt.ilike(b.title, `%${search}%`),
-              opt.ilike(b.description, `%${search}%`),
-            )
-        : undefined,
+    where: (b, o) =>
+      o.and(
+        o.eq(b.userId, session.user?.id!),
+        o
+          .or(
+            o.ilike(b.title, `%${search}%`),
+            o.ilike(b.description, `%${search}%`),
+          )
+          ?.if(search),
+      ),
   });
-
   return (
     <>
-      <Navbar withSearch={true} />
+      <Navbar withSearch={true} session={session} />
       <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
         <div className="flex items-center justify-between">
           <h1 className="text-lg font-semibold md:text-2xl">My Blogs</h1>

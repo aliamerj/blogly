@@ -27,7 +27,6 @@ import {
   Repeat,
   Save,
   Send,
-  Trash,
 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { ControllerRenderProps, useForm, useWatch } from "react-hook-form";
@@ -117,7 +116,7 @@ export const BlogForm = ({
   useEffect(() => {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(formValues));
     setHasDifferences(() => checkDifferences(formValues, blogData));
-  }, [formValues]);
+  }, [formValues,LOCAL_STORAGE_KEY,blogData]);
   const onSubmit = (data: z.infer<typeof blogSchema>, toSave: boolean) => {
     let targetData = data;
     if (blogData) targetData = findDifferences(blogData, data);

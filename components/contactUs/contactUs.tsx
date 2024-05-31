@@ -49,8 +49,8 @@ export default function ContactUs() {
     <Card className="w-full max-w-xl mx-auto my-14 p-4">
       <CardHeader>
         <CardTitle className="text-2xl">Contact Support</CardTitle>
-        <CardDescription className="text-lg">
-          We're here to help. Send us a message and we'll get back to you as
+       <CardDescription className="text-lg">
+          We&apos;re here to help. Send us a message and we&apos;ll get back to you as
           soon as possible.
         </CardDescription>
       </CardHeader>
