@@ -10,7 +10,7 @@ import {
 const apiExample = (apiKey?: string) => `const options = {
   method: 'GET',
   headers: {
-    Authorization: 'Bearer ${apiKey ?? "blogly_****************"}',
+    Authorization: 'Bearer ${apiKey ?? "blogly_*************"}',
     'Content-Type': 'application/json',
   },
 };
