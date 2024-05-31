@@ -27,23 +27,26 @@ import Link from "next/link";
 import { addNewUser } from "@/actions/user";
 import { signIn } from "next-auth/react";
 import { Loader } from "@/components/loader/Loader";
+import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
   });
 
   const onSubmit = (data: z.infer<typeof RegisterSchema>) => {
-    startTransition(() => {
+    startTransition(async () => {
       const create = async () => {
         try {
           await addNewUser(data);
           await signIn(
             "credentials",
             { email: data.email, password: data.password },
-            { redirectTo: "/blog" },
+            { redirec: false },
           );
+          router.push("/blog");
         } catch (error: any) {
           toast({
             variant: "destructive",
@@ -53,7 +56,7 @@ export default function RegisterPage() {
         }
         return;
       };
-      create();
+      await create();
     });
   };
   if (isPending) {

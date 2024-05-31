@@ -24,13 +24,14 @@ import {
 import { toast } from "@/components/ui/use-toast";
 import { signInSchema } from "@/schema/user";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useSignInErrorMessage } from "@/lib/errors/auth/hook";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import { Loader } from "@/components/loader/Loader";
 export default function LoginPage() {
   const [isPending, startTransition] = useTransition();
+  const router =useRouter()
   const params = useSearchParams();
   const errorType = params.get("error");
   const errorMessage = useSignInErrorMessage(
@@ -41,10 +42,11 @@ export default function LoginPage() {
   });
 
   const onSubmit = (data: z.infer<typeof signInSchema>) => {
-    startTransition(() => {
+    startTransition(async() => {
       const login = async () => {
         try {
-          await signIn("credentials", data, { redirectTo: "/blog" });
+          await signIn("credentials", data, { redirect: false});
+         router.push("/blog") 
         } catch (error: any) {
           toast({
             variant: "destructive",
@@ -54,7 +56,7 @@ export default function LoginPage() {
         }
         return;
       };
-      login();
+      await login();
     });
   };
   if (isPending) {
