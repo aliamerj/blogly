@@ -63,6 +63,7 @@ const getInitialData = (
     publishedTime: blogDB?.publishedTime ?? undefined,
   };
 };
+
 const findDifferences = (
   initialData: BlogFormData,
   newData: UpdateBlogFormData,
@@ -70,8 +71,17 @@ const findDifferences = (
   const differences: any = {};
   Object.keys(newData).forEach((key) => {
     const typedKey = key as keyof BlogFormData;
+
+    if (
+      typedKey === "image" &&
+      newData.image &&
+      typeof newData.image === "object"
+    ) {
+      differences[typedKey] = newData.image.name;
+    }
     if (
       typedKey !== "publishedTime" &&
+      typedKey !== "image" &&
       !_.isEqual(initialData[typedKey], newData[typedKey])
     ) {
       differences[typedKey] = newData[typedKey];
@@ -79,12 +89,14 @@ const findDifferences = (
   });
   return differences;
 };
+
 const checkDifferences = (
   currentData: UpdateBlogFormData,
   initialData?: BlogFormData,
 ): boolean => {
   if (!initialData) return true;
   const diff = findDifferences(initialData, currentData);
+  console.log({ diff });
   return Object.keys(diff).length > 0;
 };
 
@@ -104,7 +116,6 @@ export const BlogForm = ({
   const [hasDifferences, setHasDifferences] = useState(() =>
     checkDifferences(currentData, blogData),
   );
-
   const form = useForm<z.infer<typeof blogSchema>>({
     defaultValues: currentData,
     resolver: zodResolver(blogSchema),
@@ -114,9 +125,19 @@ export const BlogForm = ({
 
   // Save form values to local storage whenever they change
   useEffect(() => {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(formValues));
+    const valuesToStore = {
+      ...formValues,
+      image:
+        formValues.image && typeof formValues.image === "object"
+          ? formValues.image.name
+          : formValues.image,
+    };
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(valuesToStore));
     setHasDifferences(() => checkDifferences(formValues, blogData));
-  }, [formValues,LOCAL_STORAGE_KEY,blogData]);
+  }, [formValues, LOCAL_STORAGE_KEY, blogData]);
+  const formatTimestamp = (timestamp: Date) => {
+    return format(timestamp, "PPPpp");
+  };
   const onSubmit = (data: z.infer<typeof blogSchema>, toSave: boolean) => {
     let targetData = data;
     if (blogData) targetData = findDifferences(blogData, data);
@@ -124,14 +145,16 @@ export const BlogForm = ({
       const create = async () => {
         try {
           const formData = new FormData();
-          formData.append("image", targetData.image);
-          targetData.image = null;
+          if (targetData.image && typeof targetData.image === "object") {
+            formData.append("image", targetData.image);
+            targetData.image = targetData.image.name;
+          }
           if (blogData && blogId) {
             await patchBlog(targetData, formData, blogId);
             setBlogData(data);
             setHasDifferences(false);
             toast({
-              title: "Blog updated sucessfuly",
+              title: "Blog updated successfully",
             });
             localStorage.removeItem(LOCAL_STORAGE_KEY);
             route.refresh();
@@ -157,8 +180,11 @@ export const BlogForm = ({
       create();
     });
   };
-  const formatTimestamp = (timestamp: Date) => {
-    return format(timestamp, "PPPpp");
+  const handleToPrivate = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    form.setValue("visibility", "private");
+    form.setValue("status", "draft");
+    form.handleSubmit((data) => onSubmit(data, true))();
   };
   const handlePublish = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -169,12 +195,6 @@ export const BlogForm = ({
 
   const handleSaveDraft = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    form.setValue("status", "draft");
-    form.handleSubmit((data) => onSubmit(data, true))();
-  };
-  const handleToPrivate = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    form.setValue("visibility", "private");
     form.setValue("status", "draft");
     form.handleSubmit((data) => onSubmit(data, true))();
   };
