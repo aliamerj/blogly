@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { middleware } from "./auth.config";
 
-const protectedRoutes = ["/blog", "/blog/write", "/integrate"];
+const protectedRoutes = ["/blog", "/blog/write", "/blog/update", "/integrate"];
 const publicRoutes = ["/"];
 const loginRoutes = ["/login", "/register"];
 export default middleware((req) => {
