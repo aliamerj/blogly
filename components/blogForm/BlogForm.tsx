@@ -96,7 +96,6 @@ const checkDifferences = (
 ): boolean => {
   if (!initialData) return true;
   const diff = findDifferences(initialData, currentData);
-  console.log({ diff });
   return Object.keys(diff).length > 0;
 };
 
