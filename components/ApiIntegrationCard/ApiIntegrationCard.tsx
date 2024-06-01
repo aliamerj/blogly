@@ -1,12 +1,13 @@
-import SyntaxHighlighter from "react-syntax-highlighter";
-import { darcula } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import {
   Card,
-  CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
+  CardDescription,
+  CardContent,
 } from "@/components/ui/card";
+import SyntaxHighlighter from "react-syntax-highlighter";
+import { darcula } from "react-syntax-highlighter/dist/esm/styles/hljs";
+
 const apiExampleAllBlogs = (apiKey?: string) => `const options = {
   method: 'GET',
   headers: {
@@ -35,13 +36,13 @@ fetch('https://blogly.co/api/blogs/{id}', options)
   .catch(err => console.error(err));
   `;
 
-export const ApiUseExample = ({ apiKey }: { apiKey?: string }) => {
+export const ApiIntegrationCard = ({ apiKey }: { apiKey?: string }) => {
   return (
-    <Card className="text-start w-full max-w-2xl mx-auto mt-8 p-4">
+    <Card className="w-full max-w-2xl mx-auto my-14 p-4">
       <CardHeader>
-        <CardTitle>How to Use the API Key</CardTitle>
-        <CardDescription>
-          Example of using the API key to fetch blogs.
+        <CardTitle className="text-2xl">API Integration</CardTitle>
+        <CardDescription className="text-lg">
+          Learn how to integrate with our API to manage your blogs.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -64,3 +65,5 @@ export const ApiUseExample = ({ apiKey }: { apiKey?: string }) => {
     </Card>
   );
 };
+
+export default ApiIntegrationCard;

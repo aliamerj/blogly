@@ -21,33 +21,41 @@ export default function Home() {
     <>
       <LandNavbar />
       <main>
-        <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white pt-14 h-[50vh]">
+        {/* Header Section with Gradient */}
+        <div className="relative h-auto w-full bg-[#222831] min-h-[60vh] overflow-hidden p-10 px-5 lg:px-20">
+          <div className="absolute top-0 right-0 h-[30%] w-[30%] bg-gradient-to-tr from-emerald-200 to-emerald-500 blur-[130px]"></div>
+          <div className="absolute bottom-0 left-0 h-[30%] w-[20%] bg-gradient-to-bl from-emerald-200 to-emerald-500 blur-[130px]"></div>
           <div className="container mx-auto px-4 text-center md:px-14 lg:px-52">
-            <h1 className="text-4xl md:text-6xl font-bold mb-4">
+            <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold mb-4">
               Simplify Your Blog Management in Your App
             </h1>
-            <p className="text-lg md:text-2xl mb-8">
+            <p className="text-sm sm:text-lg md:text-2xl mb-8">
               Effortlessly integrate and manage blogs in your Next.js or React
               app. Focus on building, let us handle the SEO.
             </p>
             <Button size="lg">
-              <Link href={"/register"}>Get Started</Link>
+              <Link href={"/register"} className="font-bold text-lg">
+                Get Started
+              </Link>
             </Button>
-          </div>
-        </div>
-        <div className="relative w-full flex justify-center p-1 md:pt-20 lg:pt-32">
-          <div className="absolute w-full max-w-4xl mx-auto transform -translate-y-1/2">
+
+            {/* Image positioned at the bottom of the header section */}
+
             <Image
               src="/images/dashboard-screenshot.png"
               alt="Writing Blog Dashboard"
               priority
               width={1200}
               height={800}
-              className="rounded-lg shadow-lg"
+              className="rounded-lg shadow-lg pt-10"
             />
           </div>
         </div>
-        <section className="pt-60 px-5 md:px-10 lg:px-20" id="features">
+
+        {/* Spacer to ensure the image does not overlap with the content below */}
+        <div className="h-[160px]"></div>
+
+        <section className="px-5 md:px-10 lg:px-20" id="features">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-8">
               Discover the Power of Blogly
@@ -57,7 +65,6 @@ export default function Home() {
               app. Boost your SEO and streamline your workflow with our powerful
               features.
             </p>
-
             <div className="flex flex-wrap justify-center gap-8 mb-12">
               <Card className="w-full max-w-xs p-4">
                 <CardHeader>
@@ -69,7 +76,6 @@ export default function Home() {
                   </CardDescription>
                 </CardHeader>
               </Card>
-
               <Card className="w-full max-w-xs p-4">
                 <CardHeader>
                   <Zap className="w-12 h-12 mx-auto text-green-600" />
@@ -80,7 +86,6 @@ export default function Home() {
                   </CardDescription>
                 </CardHeader>
               </Card>
-
               <Card className="w-full max-w-xs p-4">
                 <CardHeader>
                   <Code className="w-12 h-12 mx-auto text-purple-600" />
@@ -92,19 +97,17 @@ export default function Home() {
                 </CardHeader>
               </Card>
             </div>
-
             <ApiUseExample />
-
             <div className="mt-12 mb-10">
-              <Button
-                className="px-8 py-4 font-semibold rounded-md shadow-md transition"
-                size="lg"
-              >
-                Get Started
+              <Button size="lg">
+                <Link href={"/register"} className="font-bold text-lg">
+                  Get Started
+                </Link>
               </Button>
             </div>
           </div>
         </section>
+
         <section className="py-12 bg-secondary" id="pricing">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-8">
@@ -114,7 +117,6 @@ export default function Home() {
               Currently, Blogly is completely free to use. Enjoy all features
               without any cost!
             </p>
-
             <div
               className="flex flex-wrap justify-center gap-8 mb-12"
               id="price"
@@ -136,27 +138,30 @@ export default function Home() {
                   </ul>
                 </CardContent>
                 <CardFooter className="flex justify-center">
-                  <Button className="px-8 py-4 font-semibold" variant="outline">
-                    Get Started
+                  <Button size="lg" variant="secondary">
+                    <Link href={"/register"} className="font-bold text-lg">
+                      Get Started
+                    </Link>
                   </Button>
                 </CardFooter>
               </Card>
             </div>
-
             <p className="text-lg md:text-xl">
               As we grow, premium features and plans will be introduced. Stay
               tuned!
             </p>
           </div>
         </section>
+
         <section id="support">
           <ContactUs />
         </section>
+
         <section className="py-12 bg-gray-100 dark:bg-gray-900" id="faq">
           <FaqSection />
         </section>
-      </main>
-      <Footer />
+      </main>{" "}
+      <Footer />{" "}
     </>
   );
 }

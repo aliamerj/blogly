@@ -8,7 +8,7 @@ export const LandNavbar = () => {
     <header className="sticky top-0 flex h-16 items-center justify-around gap-4 border-b bg-background px-4 md:px-6 z-10">
       <Logo />
       <div className="flex gap-2">
-        <Button size={"lg"} variant="ghost" asChild>
+        <Button className="hidden sm:flex" size={"lg"} variant="ghost" asChild>
           <Link href={"/login"}>Sign in</Link>
         </Button>
         <Button size={"lg"} asChild>
