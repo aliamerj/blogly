@@ -144,11 +144,9 @@ export const BlogForm = ({
     startTransition(() => {
       const create = async () => {
         try {
-          const formData = new FormData();
-          if (targetData.image && typeof targetData.image === "object") {
-            formData.append("image", targetData.image);
-            targetData.image = targetData.image.name;
-          }
+         const formData = new FormData();
+          formData.append("image", targetData.image);
+          targetData.image = null;
           if (blogData && blogId) {
             await patchBlog(targetData, formData, blogId);
             setBlogData(data);
