@@ -90,7 +90,6 @@ export const BlogForm = ({
   const [isPending, startTransition] = useTransition();
   const route = useRouter();
   const currentData = getInitialData(blogData);
-  console.log({ currentData });
 
   const form = useForm<z.infer<typeof blogSchema>>({
     defaultValues: currentData,
@@ -110,7 +109,6 @@ export const BlogForm = ({
     startTransition(() => {
       const create = async () => {
         try {
-          console.log({ data });
           const formData = new FormData();
           formData.append("image", data.image);
           targetData.image = null;

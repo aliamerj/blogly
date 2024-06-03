@@ -4,10 +4,11 @@ export const GoogleAnalyticsScript = () => {
   return (
     <>
       <Script
+        id="google-tag-manager"
         async
         src="https://www.googletagmanager.com/gtag/js?id=G-BYRESXN0R4"
       />
-      <Script>
+      <Script id="google-analytics">
         {`
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
