@@ -15,13 +15,14 @@ import {
 import { Code, Shield, Zap } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { Producthunt } from "./Producthunt";
 
 export default function Home() {
   return (
     <>
       <LandNavbar />
       <main>
-        {/* Header Section with Gradient */}
+        {/* Header Section with Gradient */} 
         <div className="relative h-auto w-full bg-[#222831] min-h-[60vh] overflow-hidden p-10 px-5 lg:px-20">
           <div className="absolute top-0 right-0 h-[30%] w-[30%] bg-gradient-to-tr from-emerald-200 to-emerald-500 blur-[130px]"></div>
           <div className="absolute bottom-0 left-0 h-[30%] w-[20%] bg-gradient-to-bl from-emerald-200 to-emerald-500 blur-[130px]"></div>
@@ -29,7 +30,10 @@ export default function Home() {
             <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold mb-4">
               Simplify Your Blog Management in Your App
             </h1>
-            <p className="text-sm sm:text-lg md:text-2xl mb-8">
+            <div className="flex justify-center items-center p-5">
+               <Producthunt/> 
+            </div>
+                        <p className="text-sm sm:text-lg md:text-2xl mb-8">
               Effortlessly integrate and manage blogs in your Next.js or React
               app. Focus on building, let us handle the SEO.
             </p>
@@ -38,7 +42,7 @@ export default function Home() {
                 Get Started
               </Link>
             </Button>
-
+  
             {/* Image positioned at the bottom of the header section */}
 
             <Image
