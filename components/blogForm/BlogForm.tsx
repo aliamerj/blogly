@@ -23,14 +23,20 @@ import {
   Calendar,
   Eye,
   Flame,
+  ImagePlus,
   LockKeyhole,
   Repeat,
   Save,
   Send,
 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
-import { ControllerRenderProps, useForm, useWatch } from "react-hook-form";
-import { useEffect, useState, useTransition } from "react";
+import {
+  Control,
+  Controller,
+  ControllerRenderProps,
+  useForm,
+} from "react-hook-form";
+import { useState, useTransition } from "react";
 import { blogSchema, updateBlogSchema } from "@/schema/blog";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -44,14 +50,7 @@ import Image from "next/image";
 
 type UpdateBlogFormData = z.infer<typeof updateBlogSchema>;
 type BlogFormData = z.infer<typeof blogSchema>;
-const getInitialData = (
-  LOCAL_STORAGE_KEY: string,
-  blogDB?: BlogFormData,
-): BlogFormData => {
-  const savedValues = localStorage.getItem(LOCAL_STORAGE_KEY);
-  if (savedValues) {
-    return JSON.parse(savedValues);
-  }
+const getInitialData = (blogDB?: BlogFormData): BlogFormData => {
   return {
     title: blogDB?.title ?? "",
     content: blogDB?.content ?? "",
@@ -71,17 +70,8 @@ const findDifferences = (
   const differences: any = {};
   Object.keys(newData).forEach((key) => {
     const typedKey = key as keyof BlogFormData;
-
-    if (
-      typedKey === "image" &&
-      newData.image &&
-      typeof newData.image === "object"
-    ) {
-      differences[typedKey] = newData.image.name;
-    }
     if (
       typedKey !== "publishedTime" &&
-      typedKey !== "image" &&
       !_.isEqual(initialData[typedKey], newData[typedKey])
     ) {
       differences[typedKey] = newData[typedKey];
@@ -90,81 +80,58 @@ const findDifferences = (
   return differences;
 };
 
-const checkDifferences = (
-  currentData: UpdateBlogFormData,
-  initialData?: BlogFormData,
-): boolean => {
-  if (!initialData) return true;
-  const diff = findDifferences(initialData, currentData);
-  return Object.keys(diff).length > 0;
-};
-
 export const BlogForm = ({
-  blogDB,
+  blogData,
   blogId,
 }: {
-  blogDB?: BlogFormData;
+  blogData?: BlogFormData;
   blogId?: string;
 }) => {
-  const LOCAL_STORAGE_KEY = blogId ? `blogDraft_${blogId}` : "blogDraft";
-  const [blogData, setBlogData] = useState(blogDB);
   const [isPending, startTransition] = useTransition();
   const route = useRouter();
-  const currentData = getInitialData(LOCAL_STORAGE_KEY, blogData);
+  const currentData = getInitialData(blogData);
+  console.log({ currentData });
 
-  const [hasDifferences, setHasDifferences] = useState(() =>
-    checkDifferences(currentData, blogData),
-  );
   const form = useForm<z.infer<typeof blogSchema>>({
     defaultValues: currentData,
     resolver: zodResolver(blogSchema),
   });
 
-  const formValues = useWatch({ control: form.control });
-
-  // Save form values to local storage whenever they change
-  useEffect(() => {
-    const valuesToStore = {
-      ...formValues,
-      image:
-        formValues.image && typeof formValues.image === "object"
-          ? formValues.image.name
-          : formValues.image,
-    };
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(valuesToStore));
-    setHasDifferences(() => checkDifferences(formValues, blogData));
-  }, [formValues, LOCAL_STORAGE_KEY, blogData]);
   const formatTimestamp = (timestamp: Date) => {
     return format(timestamp, "PPPpp");
   };
-  const onSubmit = (data: z.infer<typeof blogSchema>, toSave: boolean) => {
+
+  const onSubmit = async (
+    data: z.infer<typeof blogSchema>,
+    toSave: boolean,
+  ) => {
     let targetData = data;
     if (blogData) targetData = findDifferences(blogData, data);
     startTransition(() => {
       const create = async () => {
         try {
-         const formData = new FormData();
-          formData.append("image", targetData.image);
+          console.log({ data });
+          const formData = new FormData();
+          formData.append("image", data.image);
           targetData.image = null;
           if (blogData && blogId) {
             await patchBlog(targetData, formData, blogId);
-            setBlogData(data);
-            setHasDifferences(false);
+
             toast({
               title: "Blog updated successfully",
             });
-            localStorage.removeItem(LOCAL_STORAGE_KEY);
             route.refresh();
             return;
           }
           const newblogId = await postBlog(targetData, formData);
-          localStorage.removeItem(LOCAL_STORAGE_KEY);
           if (toSave) {
             route.push("/blog/update/" + newblogId);
             route.refresh();
             return;
           }
-          return route.push("/blog");
+          route.push("/blog");
+          route.refresh();
+          return;
         } catch (error: any) {
           toast({
             variant: "destructive",
@@ -183,6 +150,7 @@ export const BlogForm = ({
     form.setValue("status", "draft");
     form.handleSubmit((data) => onSubmit(data, true))();
   };
+
   const handlePublish = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     form.setValue("status", "published");
@@ -190,28 +158,6 @@ export const BlogForm = ({
     form.handleSubmit((data) => onSubmit(data, false))();
   };
 
-  const handleSaveDraft = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    form.setValue("status", "draft");
-    form.handleSubmit((data) => onSubmit(data, true))();
-  };
-
-  const handleImageChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    field: ControllerRenderProps,
-  ) => {
-    event.preventDefault();
-    if (!event.target.files) return;
-    const file = event.target.files[0];
-    if (file && file.type.substring(0, 5) === "image") {
-      field.onChange(file);
-    } else {
-      toast({
-        variant: "destructive",
-        title: "Invalid Image Type",
-      });
-    }
-  };
   return (
     <Form {...form}>
       <form className="p-5 flex gap-5 flex-col lg:flex-row">
@@ -237,10 +183,7 @@ export const BlogForm = ({
               )}
               <div className="flex flex-col gap-2">
                 {blogData && blogData.visibility === "public" ? (
-                  <Button
-                    onClick={handlePublish}
-                    disabled={isPending || !hasDifferences}
-                  >
+                  <Button onClick={handlePublish} disabled={isPending}>
                     {isPending ? (
                       <>
                         <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />{" "}
@@ -254,10 +197,7 @@ export const BlogForm = ({
                     )}
                   </Button>
                 ) : (
-                  <Button
-                    onClick={handleSaveDraft}
-                    disabled={isPending || !hasDifferences}
-                  >
+                  <Button onClick={handleToPrivate} disabled={isPending}>
                     {isPending ? (
                       <>
                         <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />{" "}
@@ -270,15 +210,6 @@ export const BlogForm = ({
                     )}
                   </Button>
                 )}
-
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  disabled={!hasDifferences}
-                  onClick={() => localStorage.removeItem(LOCAL_STORAGE_KEY)}
-                >
-                  Undo
-                </Button>
               </div>
             </div>
           </CardHeader>
@@ -306,31 +237,10 @@ export const BlogForm = ({
                   )}
                 />
               </div>
-              {blogData?.image && (
-                <Image
-                  alt="image"
-                  src={blogData.image}
-                  width={100}
-                  height={100}
-                />
-              )}
-              <div className="grid w-full max-w-sm items-center gap-1.5">
-                <FormField
+              <div className="relative mt-5 w-full md:mt-0 md:w-36">
+                <BlogImage
                   control={form.control}
-                  name="image"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel htmlFor="image">Image</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="file"
-                          accept="image/*"
-                          onChange={(e) => handleImageChange(e, { ...field })}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  currentLogo={blogData?.image}
                 />
               </div>
               <QuillEditor control={form.control} />
@@ -453,5 +363,66 @@ export const BlogForm = ({
         </Card>
       </form>
     </Form>
+  );
+};
+
+const BlogImage = ({
+  currentLogo,
+  control,
+}: {
+  currentLogo?: string | null;
+  control: Control<any>;
+}) => {
+  const [image, setImage] = useState<string | null>(currentLogo ?? null);
+  const handleImageChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    field: ControllerRenderProps,
+  ) => {
+    event.preventDefault();
+    if (!event.target.files) return;
+    const file = event.target.files[0];
+    if (file && file.type.substring(0, 5) === "image") {
+      setImage(URL.createObjectURL(file));
+      field.onChange(file);
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Invalid Image Type",
+      });
+
+      setImage(null);
+    }
+  };
+
+  return (
+    <div>
+      {image ? (
+        <Image src={image} width={100} height={100} alt="blog image" />
+      ) : (
+        <label className="flex h-32 w-full cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-secondary-foreground bg-secondary transition duration-300 hover:border-blue-500 hover:bg-blue-50 md:h-36 md:w-36">
+          <ImagePlus className="text-4xl text-gray-400 hover:text-blue-500" />
+        </label>
+      )}
+
+      <Controller
+        name="image"
+        control={control}
+        render={({ field, fieldState: { error } }) => (
+          <>
+            {error && (
+              <p className="text-center text-xs italic text-red-500">
+                {error.message}
+              </p>
+            )}
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleImageChange(e, { ...field })}
+              className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+            />
+          </>
+        )}
+      />
+    </div>
   );
 };

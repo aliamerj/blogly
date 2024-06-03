@@ -26,7 +26,7 @@ export default async function page({ params }: { params: { id: string } }) {
   return (
     <>
       <Navbar withSearch={false} />
-      <BlogForm blogDB={parseBLogData} blogId={blog.id} />
+      <BlogForm blogData={parseBLogData} blogId={blog.id} />
     </>
   );
 }
