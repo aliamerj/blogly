@@ -66,7 +66,7 @@ const Footer = () => {
               </a>
 
               <a
-                href="https://github.com/aliamerj"
+                href="https://github.com/aliamerj/blogly"
                 target="_blank"
                 className="transition-colors duration-300 hover:text-primary"
               >
