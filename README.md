@@ -1,7 +1,9 @@
 # Blogly
 
 <div align="center">
+  <a href="https://blogly.co">
   <img src="https://github.com/aliamerj/blogly/blob/main/app/opengraph-image.jpg" alt="Blogly">
+  </a>
      <h3>Blogly</h3>
   <p><strong>Free, open-source blog management tool designed to simplify content creation and management for web applications. It provides an easy-to-use dashboard for creating and editing posts, and it seamlessly integrates with your web apps, allowing you to focus on building your projects while Blogly handles your blog management.</strong></p>
 </div>
