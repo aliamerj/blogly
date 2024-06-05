@@ -21,8 +21,9 @@
 ## Technology Stack
 
 - **Frontend/Backend:** Next js 14
-- **Database:** Postgress
-
+- **Database:** PostgreSQL
+- **Host:**  AWS Amplify - S3
+  
 ## API Endpoints
 
 ### Get All Blogs
