@@ -104,6 +104,7 @@ export const BlogForm = ({
     data: z.infer<typeof blogSchema>,
     toSave: boolean,
   ) => {
+    // todo check if the time out or is it pro
     let targetData = data;
     if (blogData) targetData = findDifferences(blogData, data);
     startTransition(() => {

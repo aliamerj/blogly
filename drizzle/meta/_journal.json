@@ -8,6 +8,48 @@
       "when": 1717062499477,
       "tag": "0000_aspiring_mastermind",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1735120773196,
+      "tag": "0001_yellow_random",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1735120804794,
+      "tag": "0002_reflective_shockwave",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1735125518061,
+      "tag": "0003_dear_slipstream",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1735142735272,
+      "tag": "0004_certain_bill_hollister",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1735221703237,
+      "tag": "0005_motionless_lightspeed",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1735222925144,
+      "tag": "0006_smart_golden_guardian",
+      "breakpoints": true
     }
   ]
 }

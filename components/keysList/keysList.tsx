@@ -16,15 +16,18 @@ import {
 } from "@/components/ui/table";
 import { Button } from "../ui/button";
 import { Trash } from "lucide-react";
-import { auth } from "@/auth";
 import { notFound } from "next/navigation";
 import { databaseDrizzle } from "@/db/database";
 import { format } from "date-fns";
 import { apiKeys } from "@/db/schemas/users";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+
+
 export const KeysList = async () => {
-  const sesstion = await auth();
+  const sesstion = await getServerSession(authOptions);
   if (!sesstion?.user?.id) return notFound();
   const keys = await databaseDrizzle.query.apiKeys.findMany({
     where: (key, opt) => opt.eq(key.userId, sesstion.user?.id!),

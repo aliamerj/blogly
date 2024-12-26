@@ -6,12 +6,13 @@ import { blogSchema } from "@/schema/blog";
 import { z } from "zod";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { s3, uploadProjectLogo } from "@/aws/s3_bucket";
-import { auth } from "@/auth";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 export async function postBlog(
   data: z.infer<typeof blogSchema>,
   file: FormData,
 ) {
-  const session = await auth();
+  const session = await getServerSession(authOptions)
   if (!session?.user?.id) throw new Error("forbidden");
   const validate = blogSchema.safeParse({ ...data, image: file.get("image") });
   if (!validate.success) throw new Error("Invalid data provided");
