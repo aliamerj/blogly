@@ -13,5 +13,6 @@ export async function addNewUser(data: z.infer<typeof RegisterSchema>) {
     name: `${firstName} ${lastName}`,
     email,
     hashedPassword,
+    plan: 'FREE'
   });
 }

@@ -7,13 +7,14 @@ import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { s3, uploadProjectLogo } from "@/aws/s3_bucket";
-import { auth } from "@/auth";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 export async function patchBlog(
   data: z.infer<typeof updateBlogSchema>,
   file: FormData,
   blogId: string,
 ) {
-  const session = await auth()
+  const session = await getServerSession(authOptions)
   if(!session?.user?.id) throw new Error("Unauthorized");
   const validate = updateBlogSchema.safeParse({
     ...data,

@@ -42,13 +42,9 @@ const errorMessagesMap = {
   ExperimentalFeatureNotEnabled:
     "An experimental feature is being accessed but not enabled.",
 };
-export const useSignInErrorMessage = (errorType: string) => {
+export const useSignInErrorMessage = (errorType: string  ) => {
   const errorMessage = useMemo(() => {
-    if (!errorType) return;
-    return (
-      errorMessagesMap[errorType as keyof typeof errorMessagesMap] ||
-      "An unknown error occurred. Please try again."
-    );
+    return errorMessagesMap[errorType as keyof typeof errorMessagesMap] || "An unknown error occurred. Please try again.";
   }, [errorType]);
 
   return errorMessage;

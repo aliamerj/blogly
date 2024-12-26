@@ -10,9 +10,11 @@ import { Session } from "next-auth";
 export const Navbar = ({
   withSearch,
   session,
+  plan = ""
 }: {
   withSearch: boolean;
   session?: Session | null;
+  plan?: string 
 }) => {
   return (
     <div className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
@@ -53,7 +55,7 @@ export const Navbar = ({
         </SheetContent>
       </Sheet>
       <div className="w-full flex-1">{withSearch && <SearchField />}</div>
-      <UserAvatar session={session} />
+      <UserAvatar session={session} plan={plan} />
       <div className="ml-auto h-8 w-8">
         <ModeToggle />
       </div>

@@ -43,8 +43,7 @@ export default function RegisterPage() {
           await addNewUser(data);
           await signIn(
             "credentials",
-            { email: data.email, password: data.password },
-            { redirec: false },
+            { email: data.email, password: data.password, redirect: false },
           );
           router.push("/blog");
         } catch (error: any) {

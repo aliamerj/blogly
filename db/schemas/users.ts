@@ -5,10 +5,15 @@ import {
   text,
   primaryKey,
   integer,
+  pgEnum,
+  boolean,
 } from "drizzle-orm/pg-core";
 
 import type { AdapterAccountType } from "next-auth/adapters";
 import { blogs } from "./blogs";
+
+export const planEnum = pgEnum('plan', ['FREE', 'OLD', 'PRO']);
+export const periodEnum = pgEnum('period', ['MONTHLY', 'YEARLY']);
 
 export const users = pgTable("user", {
   id: text("id")
@@ -19,7 +24,10 @@ export const users = pgTable("user", {
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
   hashedPassword: text("hashedPassword"),
-});
+  plan: planEnum("plan").default("OLD").notNull(),
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
+  refreshSession: boolean("_refresh_session").default(false).notNull()
+})
 
 export const apiKeys = pgTable("apiKey", {
   name: text("name").primaryKey(),
@@ -29,6 +37,16 @@ export const apiKeys = pgTable("apiKey", {
   apiKey: text("api_key").unique().notNull(),
   generatedTime: timestamp("generated_time").notNull(),
 });
+
+export const subscriptions = pgTable("subscription", {
+  id:text("id").primaryKey().notNull(),
+  userId: text("user_id")
+    .references(() => users.id, { onDelete: "cascade" })
+    .notNull(),
+  period: periodEnum("period").notNull(),
+  startAt: timestamp("start_at").defaultNow().notNull(),
+  endAt: timestamp("end_at").notNull(),
+})
 
 export const accounts = pgTable(
   "account",

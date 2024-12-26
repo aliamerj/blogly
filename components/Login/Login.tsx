@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useTransition } from "react";
+import { useEffect, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {
@@ -29,30 +29,47 @@ import { useSignInErrorMessage } from "@/lib/errors/auth/hook";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import { Loader } from "@/components/loader/Loader";
+
+
 export default function LoginPage() {
   const [isPending, startTransition] = useTransition();
-  const router =useRouter()
+  const router = useRouter()
   const params = useSearchParams();
   const errorType = params.get("error");
-  const errorMessage = useSignInErrorMessage(
-    decodeURIComponent(errorType || ""),
-  );
+  const errorMessage =
+    errorType && useSignInErrorMessage(decodeURIComponent(errorType));
+
+  useEffect(() => {
+    if (errorType && errorMessage) {
+      toast({
+        variant: "destructive",
+        title: "Registration Error",
+        description: errorMessage,
+      });
+    }
+  }, [errorType, errorMessage]);
+
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
   });
 
   const onSubmit = (data: z.infer<typeof signInSchema>) => {
-    startTransition(async() => {
+    startTransition(async () => {
       const login = async () => {
         try {
-          await signIn("credentials", data, { redirect: false});
-         router.push("/blog") 
+          const res = await signIn("credentials", { email: data.email, password: data.password, redirect: false });
+          if (res?.error) {
+            router.push(`/login?error=${encodeURIComponent(res.error)}`);
+          } else if (res?.ok) {
+            toast({
+              title: "Signed in successfully",
+            })
+            router.push("/blog");
+          }
         } catch (error: any) {
-          toast({
-            variant: "destructive",
-            title: "Registration Error",
-            description: error.message,
-          });
+          router.push(
+            `/login?error=${encodeURIComponent("An unexpected error occurred")}`,
+          );
         }
         return;
       };
