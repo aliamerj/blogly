@@ -1,4 +1,4 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/auth";
 import ApiIntegrationCard from "@/components/ApiIntegrationCard/ApiIntegrationCard";
 import { ApiGenerator } from "@/components/apiGenerator/ApiGenerator";
 import { KeysList } from "@/components/keysList/keysList";

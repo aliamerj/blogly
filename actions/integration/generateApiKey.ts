@@ -1,5 +1,5 @@
 "use server";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/auth";
 import { databaseDrizzle } from "@/db/database";
 import { apiKeys } from "@/db/schemas/users";
 import { hashApiKey } from "@/lib/api_key";

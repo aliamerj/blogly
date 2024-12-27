@@ -1,4 +1,4 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/auth";
 import { BlogCard } from "@/components/blogCard/BlogCard";
 import { Navbar } from "@/components/navbar/Navbar";
 import { databaseDrizzle } from "@/db/database";

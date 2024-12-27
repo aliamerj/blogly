@@ -1,4 +1,4 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/auth";
 import { Button } from "@/components/ui/button";
 import { databaseDrizzle } from "@/db/database";
 import { getServerSession } from "next-auth";

@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useTransition } from "react";
+import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {
@@ -36,18 +36,9 @@ export default function LoginPage() {
   const router = useRouter()
   const params = useSearchParams();
   const errorType = params.get("error");
-  const errorMessage =
-    errorType && useSignInErrorMessage(decodeURIComponent(errorType));
 
-  useEffect(() => {
-    if (errorType && errorMessage) {
-      toast({
-        variant: "destructive",
-        title: "Registration Error",
-        description: errorMessage,
-      });
-    }
-  }, [errorType, errorMessage]);
+  const decodedErrorType = decodeURIComponent(errorType || "");
+  const errorMessage = useSignInErrorMessage(decodedErrorType);
 
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
@@ -82,7 +73,7 @@ export default function LoginPage() {
   return (
     <div className="flex h-screen items-center justify-center">
       <Card className="mx-auto max-w-sm">
-        {errorMessage && (
+        {errorType && errorMessage && (
           <Alert variant="destructive">
             <ExclamationTriangleIcon className="h-4 w-4" />
             <AlertTitle>Error</AlertTitle>

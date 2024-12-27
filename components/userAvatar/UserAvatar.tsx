@@ -11,7 +11,7 @@ import {
 } from "../ui/dropdown-menu";
 import { Session, getServerSession } from "next-auth";
 import Link from "next/link";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/auth";
 
 
 export default async function UserAvatar({

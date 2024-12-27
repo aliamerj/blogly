@@ -7,7 +7,7 @@ import { z } from "zod";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { s3, uploadProjectLogo } from "@/aws/s3_bucket";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/auth";
 export async function postBlog(
   data: z.infer<typeof blogSchema>,
   file: FormData,

@@ -23,7 +23,7 @@ import { apiKeys } from "@/db/schemas/users";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/auth";
 
 
 export const KeysList = async () => {
