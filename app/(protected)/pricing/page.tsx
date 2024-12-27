@@ -20,7 +20,7 @@ export default async function Pricing() {
 
   if (!data) return notFound();
 
-  if (data.plan === "PRO") return redirect("/login");
+  if (data.plan === "PRO") return redirect("/blog");
   const monthly = env.STRIPE_MONTHLY_PLAN_LINK as string;
   const yearly = env.STRIPE_YEARLY_PLAN_LINK as string;
 

@@ -25,15 +25,21 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
-    jwt: async ({ user, token }) => {
+   jwt: async ({ user, token }) => {
       if (user) {
         token.id = user.id;
-        token.createdAt = user.createdAt
+        token.createdAt = user.createdAt;
+      } else if (!token.createdAt) {
+        const dbUser = await databaseDrizzle.query.users.findFirst({
+          where: (u, opt) => opt.eq(u.id, token.id as string),
+        });
+        if (dbUser) {
+          token.createdAt = dbUser.createdAt;
+        }
       }
       return token;
     },
-  },
-  providers: [
+  },  providers: [
     CredentialsProvider({
       name: "Sign in With...",
       credentials: {
