@@ -6,7 +6,7 @@ import CalculateRemainingTime from "../ui/calculateRemainingTime";
 import { Button } from "../ui/button";
 import Link from "next/link";
 
-export default async function SubscriptionMessage({ session, upgradeBtn, plan }: { session?: Session | null, upgradeBtn: boolean, plan: string }) {
+export default function SubscriptionMessage({ session, upgradeBtn, plan }: { session?: Session | null, upgradeBtn: boolean, plan:string }) {
   if (!session?.user?.createdAt || plan === 'PRO') return null;
   return (
     <Alert variant='sub' className="flex justify-between items-center">
@@ -20,11 +20,11 @@ export default async function SubscriptionMessage({ session, upgradeBtn, plan }:
         </div>
       </div>
 
-      {upgradeBtn && <Button variant='destructive'>
-        <Link href="/pricing" className="font-bold text-lg text-white">
-          Upgrade your plan
-        </Link>
-      </Button>}
+      {upgradeBtn &&<Button variant='destructive'>
+          <Link href="/pricing" className="font-bold text-lg text-white">
+            Upgrade your plan
+          </Link>
+        </Button>}
     </Alert>
   );
 

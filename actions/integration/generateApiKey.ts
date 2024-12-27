@@ -3,6 +3,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { databaseDrizzle } from "@/db/database";
 import { apiKeys } from "@/db/schemas/users";
 import { hashApiKey } from "@/lib/api_key";
+import { hasAuthority } from "@/lib/utils";
 import { fromErrorToFormState, toFormState } from "@/lib/zodErrorHandle";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
@@ -16,9 +17,12 @@ type FormState = {
 };
 export async function generateApiKey(_: FormState, formData: FormData) {
   const session = await getServerSession(authOptions);
-  if (!session?.user?.id) throw new Error("forbidden");
-  // todo : check auth 
+  const plan = formData.get("plan");
+
   try {
+    if (!session?.user?.id || !plan) throw new Error("forbidden");
+    if (!hasAuthority(plan.toString(), new Date(session.user.createdAt!))) throw new Error("Your free plan has expired. Please subscribe to continue using the app.")
+
     const parse = apiScheme.parse({
       name: formData.get("name"),
     });
