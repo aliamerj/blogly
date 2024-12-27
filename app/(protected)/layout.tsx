@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   description: "Free and open-source blog management tool. it simplifies content creation with an easy-to-use dashboard for creating and editing posts. It seamlessly integrates with your web apps, so you can focus on building your app while we handle your blog management.",
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

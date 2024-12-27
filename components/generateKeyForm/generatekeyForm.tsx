@@ -11,7 +11,7 @@ import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { useRef } from "react";
 import { EMPTY_FORM_STATE } from "@/lib/zodErrorHandle";
 
-export const GenerateKeyForm = () => {
+export const GenerateKeyForm = ({plan}: {plan:string}) => {
   const ref = useRef<HTMLFormElement>(null);
   const [state, formAction] = useFormState(generateApiKey, EMPTY_FORM_STATE);
   return (
@@ -20,6 +20,7 @@ export const GenerateKeyForm = () => {
       ref={ref}
       action={async (data) => {
         ref.current?.reset();
+         data.set("plan", plan)
         formAction(data);
       }}
     >

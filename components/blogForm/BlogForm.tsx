@@ -81,9 +81,11 @@ const findDifferences = (
 };
 
 export const BlogForm = ({
+  isAllowed,
   blogData,
   blogId,
 }: {
+  isAllowed: boolean,
   blogData?: BlogFormData;
   blogId?: string;
 }) => {
@@ -104,7 +106,12 @@ export const BlogForm = ({
     data: z.infer<typeof blogSchema>,
     toSave: boolean,
   ) => {
-    // todo check if the time out or is it pro
+    if (!isAllowed) return toast({
+      variant: "destructive",
+      title: "Error",
+      description: "Your free plan has expired. Please subscribe to continue using the app",
+    });
+
     let targetData = data;
     if (blogData) targetData = findDifferences(blogData, data);
     startTransition(() => {

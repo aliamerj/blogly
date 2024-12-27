@@ -31,7 +31,7 @@ export default async function page() {
       <main className="container mx-auto p-6 space-y-8">
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <div className="col-span-1 md:col-span-2 lg:col-span-3">
-            <ApiGenerator />
+            <ApiGenerator plan={data.plan} />
           </div>
           <div className="col-span-1 md:col-span-2 lg:col-span-3">
             <KeysList />

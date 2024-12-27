@@ -8,7 +8,8 @@ import {
 
 import { GenerateKeyForm } from "../generateKeyForm/generatekeyForm";
 
-export const ApiGenerator = async () => {
+export const ApiGenerator = async ({ plan }: { plan: string }) => {
+
   return (
     <Card className="w-full max-w-xl mx-auto mt-5 p-4">
       <CardHeader>
@@ -19,7 +20,7 @@ export const ApiGenerator = async () => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <GenerateKeyForm />
+        <GenerateKeyForm plan={plan} />
       </CardContent>
     </Card>
   );
