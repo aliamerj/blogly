@@ -36,8 +36,9 @@ export default function LoginPage() {
   const router = useRouter()
   const params = useSearchParams();
   const errorType = params.get("error");
-  const errorMessage =
-    errorType && useSignInErrorMessage(decodeURIComponent(errorType));
+
+  const decodedErrorType = decodeURIComponent(errorType || "");
+  const errorMessage = useSignInErrorMessage(decodedErrorType);
 
   useEffect(() => {
     if (errorType && errorMessage) {
@@ -48,7 +49,6 @@ export default function LoginPage() {
       });
     }
   }, [errorType, errorMessage]);
-
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
   });
