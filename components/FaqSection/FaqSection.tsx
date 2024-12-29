@@ -14,7 +14,7 @@ const faqs = [
   {
     question: "Is Blogly free to use?",
     answer:
-      "Yes, Blogly is currently free to use. Enjoy full access to all features without any cost.",
+      "Blogly is no longer free as we work to cover hosting and maintenance costs. Your support helps keep Blogly running smoothly and allows us to continue improving it. Check out our pricing plans for more details. Thank you for understanding!",
   },
   {
     question: "How do I integrate Blogly with my existing app?",
