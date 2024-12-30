@@ -1,4 +1,4 @@
-import { Facebook, Linkedin, Github } from "lucide-react";
+import { Linkedin, Github, Twitter} from "lucide-react";
 import Link from "next/link";
 import { Logo } from "../logo/Logo";
 
@@ -51,11 +51,11 @@ const Footer = () => {
             </p>
             <div className="mt-4 flex space-x-4">
               <a
-                href="https://www.facebook.com/profile.php?id=61550300066538"
+                href="https://x.com/AliAmer12748774"
                 target="_blank"
                 className="transition-colors duration-300 hover:text-primary"
               >
-                <Facebook />
+                <Twitter />
               </a>
               <a
                 href="https://linkedin.com/in/aliamer22"
@@ -66,7 +66,7 @@ const Footer = () => {
               </a>
 
               <a
-                href="https://github.com/aliamerj/blogly"
+                href="https://github.com/aliamerj"
                 target="_blank"
                 className="transition-colors duration-300 hover:text-primary"
               >
